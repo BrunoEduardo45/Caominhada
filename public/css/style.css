@@ -629,9 +629,19 @@ footer .foot {
         grid-template-columns: 1fr
     }
 
-    h1 {
+    .hero h1 {
+        margin: 0 ;
+    }
 
+    h1 {
+        font-size: 28px !important;
+        padding: 0;
+        margin: 0 ;
+    }
+
+    h2 {
         font-size: 22px !important;
+        padding: 0;
     }
 
     .labels {
