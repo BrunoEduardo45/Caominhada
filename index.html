@@ -29,9 +29,9 @@
             <button class="burger" aria-label="Abrir menu" aria-expanded="false"
                 aria-controls="menu"><span></span></button>
             <nav id="menu" class="menu" aria-label="Navegação">
+                <a href="#beneficios">Por que ir?</a>
                 <a href="#sobre">Sobre</a>
                 <a href="#programacao">Programação</a>
-                <a href="#beneficios">Por que ir?</a>
                 <a href="#convidados">Convidados</a>
                 <a href="#local">Local</a>
                 <a class="btn primary text-center" href="https://vendas.ticketmaker.com.br/?ct=5703&cl=846"
@@ -45,29 +45,37 @@
     <!-- Hero -->
     <section class="hero" id="top">
         <div class="container hero-grid">
+            <div class="art">
+                <video id="heroVideo" class="media" autoplay muted loop playsinline webkit-playsinline preload="auto"
+                    poster="./public/img/poster.jpg">
+                    <source src="./public/img/video.mp4" type="video/mp4">
+                    Seu navegador não suporta vídeo HTML5.
+                </video>
+                <div id="tapOverlay" class="tap-overlay" role="button" aria-label="Tocar vídeo">
+                    <button class="play">▶︎ Tocar vídeo</button>
+                </div>
+                <button id="toggleSound" class="sound-btn" aria-label="Ativar som">🔊</button>
+                <span class="ribbon">1º LOTE DISPONÍVEL</span>
+            </div>
             <div>
-                <span class="eyebrow">🐾 Caminhada pet • Brindes • Desfile</span>
-                <h1>2ª Cãominhada de Salvador! Venha fazer parte dessa história!</h1>
-                <div class="labels">
+                <!-- <span class="eyebrow">🐾 Caminhada pet • Brindes • Desfile</span> -->
+                <h1>2ª Cãominhada de Salvador!</h1>
+                <h1 style="font-size: 32px;">Venha fazer parte dessa história!</h1>
+                <div class="labels" style="margin: 32px 0;">
                     <span class="label l-blue">📍 Farol da Barra</span>
                     <span class="label l-pink">📅 31 de agosto de 2025</span>
                     <span class="label l-orange">🥇 Prêmio R$ 5.000</span>
                 </div>
-                <p>Venha celebrar, proteger e amar nossos amigos de quatro patas. Em 2024, mais de <strong>3.000 pessoas</strong> tomaram as ruas de Salvador. Em 2025, vamos ainda
+                <p>Venha celebrar, proteger e amar nossos amigos de quatro patas. Em 2024, mais de <strong>3.000
+                        pessoas</strong> tomaram as ruas de Salvador. Em 2025, vamos ainda
                     mais longe: caminhada, desfile com premiação e a presença dos maiores nomes da causa animal no
                     Brasil.</p>
                 <div class="cta-row">
-                    <a class="btn primary" href="https://vendas.ticketmaker.com.br/?ct=5703&cl=846" target="_blank" rel="noopener">Comprar agora</a>
+                    <a class="btn primary" href="https://vendas.ticketmaker.com.br/?ct=5703&cl=846" target="_blank"
+                        rel="noopener">Comprar agora</a>
                 </div>
             </div>
-            <div class="art">
-                <video id="heroVideo" class="media" autoplay muted loop playsinline>
-                    <source src="./public/img/video.mp4" type="video/mp4">
-                    Seu navegador não suporta vídeo HTML5.
-                </video>
-                <button id="toggleSound" class="sound-btn" aria-label="Ativar som">🔊</button>
-                <span class="ribbon">1º LOTE DISPONÍVEL</span>
-            </div>
+
         </div>
     </section>
 
@@ -247,7 +255,8 @@
 
     <footer>
         <div class="container foot">
-            <div class="brand"><span class="mark" aria-hidden="true"></span><strong>2ª Cãominhada Salvador</strong></div>
+            <div class="brand"><span class="mark" aria-hidden="true"></span><strong>2ª Cãominhada Salvador</strong>
+            </div>
             <small>© 2025 Cãominhada Salvador • "Animal Não É Coisa"</small>
             <a class="btn primary" href="https://vendas.ticketmaker.com.br/?ct=5703&cl=846" target="_blank"
                 rel="noopener">Comprar
@@ -276,14 +285,38 @@
             })
         });
 
+        // Autoplay robusto em mobile + toggle som
         const video = document.getElementById('heroVideo');
         const btn = document.getElementById('toggleSound');
+        const overlay = document.getElementById('tapOverlay');
 
-        btn.addEventListener('click', () => {
-            video.muted = !video.muted;
-            btn.textContent = video.muted ? '🔇' : '🔊';
-            btn.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desativar som');
+        (async function initVideo() {
+            try {
+                // iOS exige muted=true antes de tentar autoplay
+                video.muted = true;
+                await video.play();
+            } catch (e) {
+                // Autoplay bloqueado: mostra overlay para toque
+                overlay && overlay.classList.add('show');
+            }
+        })();
+
+        // Tocar ao tocar no overlay (iOS/Android)
+        overlay && overlay.addEventListener('click', async () => {
+            overlay.classList.remove('show');
+            try { await video.play(); } catch (e) { }
         });
+
+        // Toggle som (também garante play após toque)
+        if (btn && video) {
+            btn.addEventListener('click', async () => {
+                if (video.paused) { try { await video.play(); } catch (e) { } }
+                video.muted = !video.muted;
+                btn.textContent = video.muted ? '🔇' : '🔊';
+                btn.setAttribute('aria-label', video.muted ? 'Ativar som' : 'Desativar som');
+            });
+        }
+
     </script>
 </body>
 
