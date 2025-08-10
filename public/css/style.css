@@ -341,7 +341,7 @@ header.open .burger span:after {
 
 /* Sections */
 section {
-    padding: 72px 0
+    padding: 48px 0
 }
 
 .title {
@@ -378,6 +378,13 @@ section {
     .benefits {
         grid-template-columns: 1fr 1fr
     }
+
+    section {
+        padding: 32px 0
+    }
+
+    
+
 }
 
 @media(max-width:620px) {
@@ -642,6 +649,10 @@ footer .foot {
     h2 {
         font-size: 18px !important;
         padding: 0;
+    }
+
+    .title {
+        font-size: 24px !important;
     }
 
     .labels {
